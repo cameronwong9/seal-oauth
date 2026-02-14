@@ -1,0 +1,11 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appIDs": ["Z27FY3B8GN.com.wongblahut.seal"],
+        "paths": ["/oauth/*"]
+      }
+    ]
+  }
+}
