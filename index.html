@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seal — Your Private Financial Ledger for Couples</title>
+  <meta name="description" content="Seal helps couples track shared expenses, split costs, and settle up — all in one beautiful app. Link your bank accounts, create tabs, and keep your finances in sync.">
+  <link rel="icon" type="image/png" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23E05D44'/><text x='50' y='68' font-size='55' font-weight='bold' fill='white' text-anchor='middle' font-family='system-ui'>S</text></svg>">
+  <style>
+    :root {
+      --bg: #FBFBF9;
+      --surface: #FFFFFF;
+      --text-primary: #222222;
+      --text-secondary: #86868B;
+      --text-tertiary: #D1D1D6;
+      --persimmon: #E05D44;
+      --persimmon-dark: #C84E38;
+      --spruce: #4A6C58;
+      --border: #E8E8E1;
+      --gold: #C0A04C;
+      --rose: #D4837A;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(251, 251, 249, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      z-index: 100;
+      padding: 0 24px;
+    }
+    .nav-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text-primary);
+    }
+    .nav-logo-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--persimmon);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 18px;
+    }
+    .nav-logo-text {
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-secondary);
+      font-size: 15px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text-primary); }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 160px 24px 100px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(circle, rgba(224,93,68,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero h1 {
+      font-size: clamp(40px, 6vw, 64px);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 20px;
+      position: relative;
+    }
+    .hero h1 span { color: var(--persimmon); }
+    .hero p {
+      font-size: clamp(17px, 2vw, 20px);
+      color: var(--text-secondary);
+      max-width: 540px;
+      margin: 0 auto 40px;
+      line-height: 1.6;
+    }
+
+    /* ── APP ICON DISPLAY ── */
+    .hero-icon {
+      width: 120px;
+      height: 120px;
+      border-radius: 28px;
+      margin: 0 auto 48px;
+      position: relative;
+      background: var(--persimmon);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 20px 60px rgba(224,93,68,0.3), 0 8px 20px rgba(0,0,0,0.1);
+    }
+    .hero-icon svg {
+      width: 80px;
+      height: 80px;
+    }
+
+    /* ── BADGE ── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+    }
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--spruce);
+    }
+
+    /* ── FEATURES ── */
+    .features {
+      padding: 80px 24px;
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+    .features-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+    .features-header h2 {
+      font-size: 34px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+    .features-header p {
+      font-size: 17px;
+      color: var(--text-secondary);
+      max-width: 480px;
+      margin: 0 auto;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .feature-card {
+      background: var(--surface);
+      border-radius: 20px;
+      padding: 32px;
+      border: 1px solid var(--border);
+      transition: box-shadow 0.3s, transform 0.3s;
+    }
+    .feature-card:hover {
+      box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+      transform: translateY(-2px);
+    }
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      font-size: 22px;
+    }
+    .feature-icon.red { background: rgba(224,93,68,0.1); }
+    .feature-icon.green { background: rgba(74,108,88,0.1); }
+    .feature-icon.gold { background: rgba(192,160,76,0.1); }
+    .feature-card h3 {
+      font-size: 17px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .feature-card p {
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* ── HOW IT WORKS ── */
+    .how-it-works {
+      padding: 80px 24px;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .how-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+    .how-inner h2 {
+      text-align: center;
+      font-size: 34px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 60px;
+    }
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 40px;
+      text-align: center;
+    }
+    .step-number {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--persimmon);
+      color: white;
+      font-weight: 700;
+      font-size: 17px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+    }
+    .step h3 {
+      font-size: 17px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .step p {
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* ── SECURITY SECTION ── */
+    .security {
+      padding: 80px 24px;
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+    .security-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .security-header h2 {
+      font-size: 34px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+    .security-header p {
+      font-size: 17px;
+      color: var(--text-secondary);
+      max-width: 520px;
+      margin: 0 auto;
+    }
+    .security-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+    .security-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 20px;
+      background: var(--surface);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+    }
+    .security-check {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: rgba(74,108,88,0.1);
+      color: var(--spruce);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 14px;
+      font-weight: 700;
+      margin-top: 1px;
+    }
+    .security-item-text h4 {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .security-item-text p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 48px 24px;
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .footer-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .footer-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .footer-logo {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: var(--persimmon);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 14px;
+    }
+    .footer-copy {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+    .footer-links a {
+      font-size: 13px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--text-primary); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      .nav-links { gap: 20px; }
+      .hero { padding: 130px 20px 60px; }
+      .hero-icon { width: 88px; height: 88px; border-radius: 22px; }
+      .hero-icon svg { width: 60px; height: 60px; }
+      .features, .security { padding: 60px 20px; }
+      .how-it-works { padding: 60px 20px; }
+      .footer-inner { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">
+        <div class="nav-logo-icon">S</div>
+        <span class="nav-logo-text">Seal</span>
+      </a>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#security">Security</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="mailto:cameronwong9@gmail.com">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-icon">
+      <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="30" cy="40" r="24" fill="#C0A04C" opacity="0.9"/>
+        <circle cx="50" cy="40" r="24" fill="#D4837A" opacity="0.6"/>
+      </svg>
+    </div>
+    <div class="badge">
+      <span class="badge-dot"></span>
+      Built for couples
+    </div>
+    <h1>Your finances,<br><span>sealed together</span></h1>
+    <p>Seal is the private financial ledger for couples. Track shared expenses, split costs fairly, and settle up — all in one place.</p>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features" id="features">
+    <div class="features-header">
+      <h2>Everything you need</h2>
+      <p>From automatic bank syncing to one-tap settlements, Seal handles the tedious parts of shared finances.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon red">🏦</div>
+        <h3>Automatic Bank Sync</h3>
+        <p>Connect your bank accounts securely through Plaid. Transactions appear automatically — no manual entry needed.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon green">📋</div>
+        <h3>Shared Tabs</h3>
+        <p>Group expenses into tabs for trips, projects, or months. Both partners see the same real-time view.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon gold">⚖️</div>
+        <h3>Fair Splitting</h3>
+        <p>Assign transactions to tabs with flexible split options. Seal calculates who owes what, down to the cent.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon green">✅</div>
+        <h3>One-Tap Settlement</h3>
+        <p>When you're ready to settle up, seal the tab and send a payment request directly through Venmo.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon red">🔔</div>
+        <h3>Push Notifications</h3>
+        <p>Stay in the loop when your partner adds a transaction, creates a tab, or requests a payment.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon gold">🔒</div>
+        <h3>Two-Factor Auth</h3>
+        <p>Protect your financial data with TOTP-based multi-factor authentication. Your security comes first.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how-it-works">
+    <div class="how-inner">
+      <h2>How it works</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <h3>Sign up together</h3>
+          <p>Create your accounts and join a shared household. It takes less than a minute.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <h3>Link your banks</h3>
+          <p>Securely connect your bank accounts through Plaid. Your credentials never touch our servers.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <h3>Track & split</h3>
+          <p>Add transactions to shared tabs. Seal calculates running balances automatically.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">4</div>
+          <h3>Settle up</h3>
+          <p>Seal the tab and settle the balance through Venmo. Done.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECURITY -->
+  <section class="security" id="security">
+    <div class="security-header">
+      <h2>Security first</h2>
+      <p>Your financial data deserves serious protection. Here's how we keep it safe.</p>
+    </div>
+    <div class="security-grid">
+      <div class="security-item">
+        <div class="security-check">✓</div>
+        <div class="security-item-text">
+          <h4>Bank-level encryption</h4>
+          <p>All data encrypted in transit (TLS 1.2+) and at rest (AES-256).</p>
+        </div>
+      </div>
+      <div class="security-item">
+        <div class="security-check">✓</div>
+        <div class="security-item-text">
+          <h4>Multi-factor authentication</h4>
+          <p>TOTP-based MFA protects every account from unauthorized access.</p>
+        </div>
+      </div>
+      <div class="security-item">
+        <div class="security-check">✓</div>
+        <div class="security-item-text">
+          <h4>Row-level security</h4>
+          <p>Database policies ensure you can only see your own partnership's data.</p>
+        </div>
+      </div>
+      <div class="security-item">
+        <div class="security-check">✓</div>
+        <div class="security-item-text">
+          <h4>Server-side secrets</h4>
+          <p>API keys and tokens are never exposed to the mobile app.</p>
+        </div>
+      </div>
+      <div class="security-item">
+        <div class="security-check">✓</div>
+        <div class="security-item-text">
+          <h4>Plaid-secured connections</h4>
+          <p>Bank credentials are handled exclusively by Plaid's sandboxed environment.</p>
+        </div>
+      </div>
+      <div class="security-item">
+        <div class="security-check">✓</div>
+        <div class="security-item-text">
+          <h4>SOC 2 infrastructure</h4>
+          <p>Built on Supabase (AWS), with SOC 2 Type II certified infrastructure.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-left">
+        <div class="footer-logo">S</div>
+        <span class="footer-copy">&copy; 2026 Seal. All rights reserved.</span>
+      </div>
+      <div class="footer-links">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="mailto:cameronwong9@gmail.com">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
